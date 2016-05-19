@@ -4,48 +4,50 @@ import lejos.nxt.SensorPort;
 import lejos.nxt.TouchSensor;
 import lejos.nxt.LightSensor;
 import lejos.robotics.navigation.DifferentialPilot;
+import lejos.nxt.LCD;
 
 /**
- * Robot that stops if it hits something before it completes its travel.
+ * 
  */
 public class TravelTest
 {
     DifferentialPilot pilot;
-    TouchSensor bump = new TouchSensor(SensorPort.S4);
-    LightSensor light = new LightSensor(SensorPort.S1);
-
-    public void exitBox()
+    TouchSensor bump1 = new TouchSensor(SensorPort.S1);
+    TouchSensor bump2 = new TouchSensor(SensorPort.S4);
+    LightSensor light = new LightSensor(SensorPort.S3);
+    
+    public void goHam()
     {
-        pilot.travel(10, true);
+        pilot.travel(12, true);
         while (pilot.isMoving())
         {
-            if (bump.isPressed())
+            if (bump1.isPressed() || bump2.isPressed())
             {
                 pilot.stop();
                 pilot.travel(-5, false);
                 pilot.rotate(110);
-                pilot.travel(10, true);
+                pilot.travel(12, true);
             }
         }
-        System.out.println(" "+pilot.getMovement().getDistanceTraveled());
-        Button.waitForAnyPress();
-    }
-    
-    public void goHam()
-    {
+        //System.out.println(" "+pilot.getMovement().getDistanceTraveled());
+        
+        pilot.travel(50, true);
         while(pilot.isMoving())
         {
-            if (light.getLightValue()<5)
+            if (light.getLightValue() < 20)
             {
-                
+                pilot.stop();
+                System.out.println(light.getLightValue());
+                LCD.drawInt(light.getLightValue(),0,0,0);
             }
         }
+        Button.waitForAnyPress();
     }
 
     public static void main(String[] args)
     {
         TravelTest traveler = new TravelTest();
         traveler.pilot = new DifferentialPilot(2.25f, 5.5f, Motor.A, Motor.C);
-        traveler.exitBox();
+        traveler.goHam();
     }
 }
