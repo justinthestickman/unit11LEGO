@@ -30,7 +30,7 @@ public class Robot
             {
                 pilot.stop();
                 pilot.travel(-5, false);
-                pilot.rotate(110);
+                pilot.rotate(90);
                 pilot.travel(12, true);
             }
         }
@@ -49,8 +49,8 @@ public class Robot
         
         //Travel around circle
         pilot.travel(4.5, false);
-        pilot.rotate(-90);
-        pilot.arc(53.5, -360);
+        pilot.rotate(90);
+        pilot.arc(53.5, 360);
     }
     
     public void lightSensorTest()
